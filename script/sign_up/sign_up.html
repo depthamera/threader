@@ -6,6 +6,39 @@
     <title>Document</title>
 </head>
 <body>
-    
+    <script>
+        const checkInputProvided = (element, elementName) => {
+            if(element.value == '') {
+                alert(`${elementName}를 입력해 주세요`);
+                element.focus();
+                return false;
+            } 
+            return true;
+        }
+
+        const checkIdDuplication = () => {
+            const userId = document.getElementById('user_id');
+            if(checkInputProvided(userId, '아이디')) {
+                window.open(`id_duplication_check.php?user_id=${userId.value}`, '_blank', 'scrollbars=no, width=320, height=120');
+            } 
+        }
+        
+        const trySubmit = () => {
+            const userId = document.getElementById('user_id');
+            const userPassword = document.getElementById('user_password');
+            if(checkInputProvided(userId, '아이디') && checkInputProvided(userPassword, '비밀번호')) {
+                document.sign_up.submit();
+            }
+        }
+    </script>
+    <h1>가입 정보 입력</h1>
+
+    <form action="sign_up.php" method="post" name="sign_up">
+        <input type="text" name="user_id" id="user_id" placeholder="아이디"> 
+        <button onclick="idDuplicationCheck()">중복 확인</button> <br>
+
+        <input type="password" name="user_password" id="user_password" placeholder="비밀번호">
+    </form> <br>
+    <button onclick="trySubmit()">가입</button>
 </body>
 </html>
