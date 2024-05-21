@@ -5,16 +5,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <?php include "../header/header.php" ?>
 </head>
 
 <body>
     <?php
 
     //단일 스레드 출력 함수
-    function draw_thread($thread)
+    function draw_thread($row)
     {
-        $title = $thread["title"];
-        echo ("$title <br>");
+        $thread_id = $row["thread_id"];
+        echo ("<a href=thread.php?thread_id=$thread_id>$thread_id</a><br>");
     }
 
     //최근에 업데이트된 스레드부터 내림차순으로 정렬
@@ -33,7 +34,7 @@
 
     //스레드 출력
     if (mysqli_num_rows($result) > 0) {
-        $page = (isset($_GET["page"]) ? $_GET["page"] : 1);
+        $page = $_GET["page"];
         $offset = ROW_MAX * ($page - 1);
         mysqli_data_seek($result, $offset);
 

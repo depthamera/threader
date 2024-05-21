@@ -11,9 +11,11 @@
 <body>
     <?php
     //코멘트 출력 함수
-    function draw_comment($comment)
+    function draw_comment($row)
     {
-        echo $comment["thread_id"] . "| " . $comment["comment"] . "<br>";
+        $thread_id = $row["thread_id"];
+        $comment = $row["comment"];
+        echo ("<a href=thread.php?thread_id=$thread_id>$thread_id| $comment</a><br>");
     }
     $keyword = $_GET["keyword"];
     $page = $_GET["page"];
