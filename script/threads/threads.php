@@ -40,26 +40,46 @@
             ORDER BY c2.last_id DESC;";
 
     $result = mysqli_query($con, $sql);
-
+    $rows = mysqli_num_rows($result);
     //한 페이지에 표시될 최대 스레드
     const ROW_MAX = 10;
+    //표시될 최대 페이지 수
+    const PAGE_MAX = 10;
 
-    //스레드 출력
-    if (mysqli_num_rows($result) > 0) {
+    //페이지 출력
+    if ($rows > 0) {
         $page = $_GET["page"];
+        $pages = $rows / ROW_MAX + (($rows % ROW_MAX) == 0 ? 0 : 1);
         $offset = ROW_MAX * ($page - 1);
         mysqli_data_seek($result, $offset);
 
-        for ($end = $offset + ROW_MAX; $end != $offset && $row = mysqli_fetch_array($result); $offset++) {
+        //ROW_MAX만큼 페이지 출력
+        for ($i = $offset, $end = $offset + ROW_MAX; $end != $i && $row = mysqli_fetch_array($result); $i++) {
             draw_thread($row);
         }
+
+        echo "<hr>";
+        //페이지 이동 번호 출력
+        for ($i = $page - PAGE_MAX, $count = 0, $end = $page + PAGE_MAX; $count < PAGE_MAX && $i <= $pages; $i++) {
+            if ($i <= 0) continue;
+
+            if ($i == $page)
+                echo "| $i ";
+            else {
+                echo "| <a href='threads.php?page=$i'>$i</a>";
+            }
+            $count++;
+        }
     }
+
     ?>
 
 
     <h3>새로운 스레드 시작하기</h3>
     <form action="thread_submit.php" method="post" name="thread_post">
-        <input type="text" name="title" id="title" placeholder="제목"><br>
+        <input type="text" name="title" id="title" placeholder="제목">
+        <input type="checkbox" name="is_anonymous" id="anonymous" value="yep">
+        <label for="anonymous">익명</label><br>
         <textarea name="comment" id="comment" cols="30" rows="10" placeholder="내용"></textarea>
         <button type="sumbit">게시</button>
     </form>

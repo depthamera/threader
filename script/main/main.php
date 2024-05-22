@@ -9,9 +9,14 @@
 </head>
 
 <body>
-  <a href="">로그인</a>
-  <a href="">회원가입</a>
-  <a href="">스레드 구경하기<a>
+  <?php
+  if (!isset($_SESSION["member_id"])) { ?>
+    <a href="../account/sign_in.php">로그인</a>
+    <a href="../account/sign_up.php">회원가입</a>
+  <?php
+  }
+  ?>
+  <a href="../threads/threads.php?page=1">스레드 구경하기</a>
 </body>
 
 </html>
