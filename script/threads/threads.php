@@ -17,27 +17,30 @@
         $thread_id = $row["thread_id"];
         $title = $row["title"];
         $comment = $row["comment"];
+        $author = ($row["author_type"] == "anonymous") ? "익명" : $row["author_id"];
+        $target = "thread.php?thread_id=$thread_id"; ?>
 
 
-        echo ("<a href=thread.php?thread_id=$thread_id>
-                $thread_id | $title - $comment
-            </a><br>");
+        <tr onclick="location.href='<?= $target ?>'">
+            <td><?= $thread_id ?></td>
+            <td><?= $author ?></td>
+            <td><?= $title ?></td>
+            <td><?= $comment ?></td>
+        </tr>
+    <?php
     }
 
     //최근에 업데이트된 스레드부터 내림차순으로 정렬
     $con = mysqli_connect("localhost", "threader_user", "0000", "threader");
-    $sql = "SELECT c1.thread_id, c1.title, c1.comment
+    $sql = "SELECT cmt.thread_id, cmt.title, cmt.comment, cmt.author_id, cmt.author_type
             FROM (
-                SELECT *, 
-                    ROW_NUMBER() OVER(PARTITION BY thread_id ORDER BY comment_id) idx
-                FROM comment) c1
-            JOIN (
-                SELECT DISTINCT thread_id, 
-                    MAX(comment_id) OVER(PARTITION BY thread_id) last_id
-                FROM comment) c2
-            ON c1.thread_id = c2.thread_id
-            WHERE c1.idx = 1
-            ORDER BY c2.last_id DESC;";
+                SELECT *
+                FROM comment
+                WHERE thread_inner_id = 1
+                ) cmt
+            JOIN thread th
+            ON cmt.comment_id = th.comment_id_first
+            ORDER BY th.comment_id_last DESC;";
 
     $result = mysqli_query($con, $sql);
     $rows = mysqli_num_rows($result);
@@ -48,15 +51,18 @@
 
     //페이지 출력
     if ($rows > 0) {
+        echo "<table>";
+        echo "<tr><td>번호</td><td>작성자</td><td>제목</td><td>내용</td></tr>";
         $page = $_GET["page"];
         $pages = $rows / ROW_MAX + (($rows % ROW_MAX) == 0 ? 0 : 1);
         $offset = ROW_MAX * ($page - 1);
         mysqli_data_seek($result, $offset);
 
-        //ROW_MAX만큼 페이지 출력
+        //ROW_MAX만큼 스레드 출력
         for ($i = $offset, $end = $offset + ROW_MAX; $end != $i && $row = mysqli_fetch_array($result); $i++) {
             draw_thread($row);
         }
+        echo "</table>";
 
         echo "<hr>";
         //페이지 이동 번호 출력
@@ -78,8 +84,11 @@
     <h3>새로운 스레드 시작하기</h3>
     <form action="thread_submit.php" method="post" name="thread_post">
         <input type="text" name="title" id="title" placeholder="제목">
-        <input type="checkbox" name="is_anonymous" id="anonymous" value="yep">
-        <label for="anonymous">익명</label><br>
+        <?php if (isset($_SESSION["member_id"])) { ?>
+            <input type="checkbox" name="is_anonymous" id="anonymous" value="yep">
+            <label for="anonymous">익명</label>
+        <?php } ?>
+        <br>
         <textarea name="comment" id="comment" cols="30" rows="10" placeholder="내용"></textarea>
         <button type="sumbit">게시</button>
     </form>
