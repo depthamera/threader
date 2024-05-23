@@ -30,7 +30,12 @@
     <h3>코멘트 등록하기</h3>
     <form action="comment_submit.php" method="post" name="comment_form">
         <input type="hidden" name="thread_id" value=<?= $thread_id ?>>
-        <input type="text" name="title" id="title" placeholder="제목"><br>
+        <input type="text" name="title" id="title" placeholder="제목">
+        <?php if (isset($_SESSION["member_id"])) { ?>
+            <input type="checkbox" name="is_anonymous" id="anonymous" value="yep">
+            <label for="anonymous">익명</label>
+        <?php } ?>
+        <br>
         <textarea name="comment" id="comment" cols="30" rows="10" placeholder="내용"></textarea>
         <button type="sumbit">게시</button>
     </form>

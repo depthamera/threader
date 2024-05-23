@@ -15,7 +15,14 @@
         <a href="../main/main.php">THREADER</a>
         <a href="../threads/threads.php?page=1">스레드 목록</a>
         <input type="text" name="keyword" id="keyword" onkeypress="handleKeyPress(event)" placeholder="검색">
-        <?= isset($_SESSION["member_id"]) ? "<a href='../account/logout.php'>로그아웃</a>" : "" ?>
+        <?php
+        if (isset($_SESSION["member_id"]))
+            echo "<a href='../account/logout.php'>로그아웃</a>";
+        else {
+            echo "<a href='../account/sign_in.php'>로그인</a> ";
+            echo "<a href='../account/sign_up.php'>회원가입</a>";
+        }
+        ?>
         <hr>
     </header>
 </head>

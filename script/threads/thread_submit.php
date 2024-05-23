@@ -15,13 +15,13 @@ $thread_id = mysqli_fetch_array(mysqli_query($con, $sql))[0];
 
 //가져온 스레드 번호로 코멘트 등록
 if (isset($_POST["is_anonymous"])) {
-    $sql = "INSERT INTO comment(thread_id, thread_innner_id, title, comment, author_id) 
+    $sql = "INSERT INTO comment(thread_id, thread_inner_id, title, comment, author_id) 
     VALUES ($thread_id, 1, '$title', '$comment', '$member_id')";
 } else if ($member_id) {
-    $sql = "INSERT INTO comment(thread_id, thread_innner_id, title, comment, author_id, author_type) 
+    $sql = "INSERT INTO comment(thread_id, thread_inner_id, title, comment, author_id, author_type) 
     VALUES ($thread_id, 1, '$title', '$comment', '$member_id', 'member')";
 } else {
-    $sql = "INSERT INTO comment(thread_id, thread_innner_id, title, comment) 
+    $sql = "INSERT INTO comment(thread_id, thread_inner_id, title, comment) 
     VALUES ($thread_id, 1, '$title', '$comment')";
 }
 mysqli_query($con, $sql);
@@ -31,7 +31,8 @@ $sql = "SELECT comment_id FROM comment ORDER BY 1 DESC LIMIT 1";
 $comment_id = mysqli_fetch_array(mysqli_query($con, $sql))[0];
 
 //등록한 스레드의 정보를 갱신
-$sql = "UPDATE thread SET comment_id_first = $comment_id, comment_id_last = $comment_id,  WHERE thread_id = $thread_id";
+$sql = "UPDATE thread SET comment_id_first = $comment_id, comment_id_last = $comment_id WHERE thread_id = $thread_id";
+mysqli_query($con, $sql);
 
 //생성한 스레드로 이동
 echo "<script>location.replace('thread.php?thread_id=$thread_id')</script>";
