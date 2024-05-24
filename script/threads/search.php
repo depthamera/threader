@@ -27,10 +27,11 @@
         $inner_id = $row["thread_inner_id"];
         $title = $row["title"];
         $comment = $row["comment"];
-        $author = ($row["author_type"] == "anonymous") ? "익명" : $row["author_id"]; ?>
+        $author = ($row["author_type"] == "anonymous") ? "익명" : $row["author_id"];
+        $target = "thread.php?thread_id=$thread_id"; ?>
 
-
-        <tr>
+        <tr onclick="location.href='<?= $target ?>'">
+            <td><?= $thread_id ?></td>
             <td><?= $author ?></td>
             <td><?= $title ?></td>
             <td><?= $comment ?></td>
@@ -59,7 +60,7 @@
     //페이지 출력, 관리자 계정이라면 삭제 메뉴도 표시
     if ($rows > 0) {
         echo "<table>";
-        echo "<tr><td>작성자</td><td>제목</td><td>내용</td>" .
+        echo "<tr><td>스레드 번호</td><td>작성자</td><td>제목</td><td>내용</td>" .
             ($is_admin ? "<td>관리</td>" : "")
             . "</tr>";
         $page = $_GET["page"];

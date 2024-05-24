@@ -1,4 +1,5 @@
 <head>
+    <h3>이것은 헤더입니다</h3>
     <?php
     session_start();
     $is_admin = (isset($_SESSION["permission"]) && $_SESSION["permission"] == "admin");
