@@ -1,5 +1,8 @@
 <head>
-    <?php session_start() ?>
+    <?php
+    session_start();
+    $is_admin = (isset($_SESSION["permission"]) && $_SESSION["permission"] == "admin");
+    ?>
     <header>
         <script>
             const handleKeyPress = (e) => {

@@ -6,14 +6,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <?php include "../header/header.php" ?>
+
+    <style>
+        table,
+        tr,
+        td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+    </style>
 </head>
 
 <body>
-    <h3>스레드 목록</h3>
+    <h3>스레드 목록 (클릭 시 이동)</h3>
     <?php
 
     //단일 스레드 출력 함수
-    function draw_thread($row)
+    function draw_thread($row, $is_admin)
     {
         $thread_id = $row["thread_id"];
         $title = $row["title"];
@@ -27,6 +36,12 @@
             <td><?= $author ?></td>
             <td><?= $title ?></td>
             <td><?= $comment ?></td>
+            <?php
+            if ($is_admin) { ?>
+                <td><a href="admin_thread_delete.php?thread_id=<?= $thread_id ?>">삭제</a></td>
+            <?php
+            }
+            ?>
         </tr>
     <?php
     }
@@ -50,10 +65,12 @@
     //표시될 최대 페이지 수
     const PAGE_MAX = 10;
 
-    //페이지 출력
+    //페이지 출력, 관리자 계정이라면 삭제 메뉴도 표시
     if ($rows > 0) {
         echo "<table>";
-        echo "<tr><td>번호</td><td>작성자</td><td>제목</td><td>내용</td></tr>";
+        echo "<tr><td>스레드 번호</td><td>작성자</td><td>제목</td><td>내용</td>" .
+            ($is_admin ? "<td>관리</td>" : "")
+            . "</tr>";
         $page = $_GET["page"];
         $pages = $rows / ROW_MAX + (($rows % ROW_MAX) == 0 ? 0 : 1);
         $offset = ROW_MAX * ($page - 1);
@@ -61,7 +78,7 @@
 
         //ROW_MAX만큼 스레드 출력
         for ($i = $offset, $end = $offset + ROW_MAX; $end != $i && $row = mysqli_fetch_array($result); $i++) {
-            draw_thread($row);
+            draw_thread($row, $is_admin);
         }
         echo "</table>";
 

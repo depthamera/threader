@@ -13,6 +13,9 @@
     if (isset($_SESSION["member_id"])) {
         unset($_SESSION["member_id"]);
     }
+    if (isset($_SESSION["permission"])) {
+        unset($_SESSION["permission"]);
+    }
     ?>
 
     <script>

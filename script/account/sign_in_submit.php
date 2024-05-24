@@ -17,6 +17,7 @@ $row = mysqli_fetch_assoc($result);
 //검사에 성공했다면 세션에 아이디 등록 후 메인 페이지로 이동
 if ($row) {
     $_SESSION["member_id"] = $row["member_id"];
+    $_SESSION["permission"] = $row["permission"];
     echo "<script>location.replace('../main/main.php')</script>";
 }
 //검사에 실패했다면 로그인 페이지로 이동
