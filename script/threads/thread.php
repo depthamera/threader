@@ -19,19 +19,27 @@
 
 <body>
     <?php
-    function draw_comment($row)
+    function draw_comment($row, $is_admin)
     {
-        $comment_id = $row["thread_inner_id"];
+        $comment_id = $row["comment_id"];
+        $thread_id = $row["thread_id"];
+        $inner_id = $row["thread_inner_id"];
         $title = $row["title"];
         $comment = $row["comment"];
         $author = ($row["author_type"] == "anonymous") ? "익명" : $row["author_id"]; ?>
 
 
         <tr>
-            <td><?= $comment_id ?></td>
+            <td><?= $inner_id ?></td>
             <td><?= $author ?></td>
             <td><?= $title ?></td>
             <td><?= $comment ?></td>
+            <?php
+            if ($is_admin && $inner_id != 1) { ?>
+                <td><a href="admin_comment_delete.php?thread_id=<?= $thread_id ?>&comment_id=<?= $comment_id ?>">삭제</a></td>
+            <?php
+            }
+            ?>
         </tr>
     <?php
     }
@@ -42,9 +50,10 @@
     $result = mysqli_query($con, $sql);
 
     echo "<table>";
-    echo "<tr><td>코멘트 번호</td><td>작성자</td><td>제목</td><td>내용</td></tr>";
+    echo "<tr><td>코멘트 번호</td><td>작성자</td><td>제목</td><td>내용</td>" .
+        ($is_admin ? "<td>관리</td>" : "") . "</tr>";
     while ($row = mysqli_fetch_assoc($result)) {
-        draw_comment($row);
+        draw_comment($row, $is_admin);
     }
     echo "</table>";
     ?>
