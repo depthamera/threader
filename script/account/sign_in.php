@@ -5,10 +5,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Document</title>
-  <?php include "../header/header.php" ?>
 </head>
 
 <body>
+  <?php include "../header/header.php" ?>
   <script>
     //엘리먼트에 값이 입략되었는지 확인. (엘리먼트, 실패 시 출력할 엘리먼트의 이름)
     const checkInputProvided = (element, elementName) => {
@@ -42,7 +42,7 @@
     <input type="password" name="member_password" id="member_password" placeholder="비밀번호" />
   </form>
   <br />
-  <button type="button" onclick="trySubmit()">가입</button>
+  <button type="button" onclick="trySubmit()">로그인</button>
 </body>
 
 </html>

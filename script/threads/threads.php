@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <?php include "../header/header.php" ?>
 
     <style>
         table,
@@ -18,6 +17,7 @@
 </head>
 
 <body>
+    <?php include "../header/header.php" ?>
     <h3>스레드 목록 (클릭 시 이동)</h3>
     <?php
     //스레드 출력 함수
@@ -32,7 +32,15 @@
 
         <tr onclick="location.href='<?= $target ?>'">
             <td><?= $thread_id ?></td>
-            <td><?= ($row["author_type"] == "anonymous") ? "익명" : $author; ?></td>
+            <td>
+                <?php
+                if ($row["author_type"] == "anonymous") {
+                    echo "익명";
+                } else {
+                    echo $row["member_name"] . "(" . $row["author_id"] . ")";
+                }
+                ?>
+            </td>
             <td><?= $title ?></td>
             <td><?= $comment ?></td>
             <?php
@@ -47,14 +55,18 @@
 
     //최근에 업데이트된 스레드부터 내림차순으로 정렬
     $con = mysqli_connect("localhost", "threader_user", "0000", "threader");
-    $sql = "SELECT cmt.thread_id, cmt.title, cmt.comment, cmt.author_id, cmt.author_type
+    $sql = "SELECT cmt.thread_id, cmt.title, cmt.comment, cmt.author_id, cmt.author_type,
+			CASE cmt.author_id
+            WHEN NULL THEN NULL
+            ELSE (SELECT member_name FROM member WHERE member_id = cmt.author_id)
+            END AS member_name
             FROM (
                 SELECT *
                 FROM comment
                 WHERE thread_inner_id = 1
                 ) cmt
             JOIN thread th
-            ON cmt.comment_id = th.comment_id_first
+            ON cmt.comment_id = th.comment_id_first          
             ORDER BY th.comment_id_last DESC;";
 
     $result = mysqli_query($con, $sql);

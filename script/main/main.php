@@ -5,10 +5,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Document</title>
-  <?php include "../header/header.php" ?>
 </head>
 
 <body>
+  <?php include "../header/header.php" ?>
   <h1>메인 페이지입니다</h1>
   <?php
   if (!isset($_SESSION["member_id"])) { ?>

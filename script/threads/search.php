@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <?php include "../header/header.php" ?>
 
     <style>
         table,
@@ -18,6 +17,7 @@
 </head>
 
 <body>
+    <?php include "../header/header.php" ?>
     <?php
     //코멘트 출력 함수
     function draw_comment($row, $is_admin)
@@ -32,7 +32,15 @@
 
         <tr onclick="location.href='<?= $target ?>'">
             <td><?= $thread_id ?></td>
-            <td><?= ($row["author_type"] == "anonymous") ? "익명" : $row["author_id"]; ?></td>
+            <td>
+                <?php
+                if ($row["author_type"] == "anonymous") {
+                    echo "익명";
+                } else {
+                    echo $row["member_name"] . "(" . $row["author_id"] . ")";
+                }
+                ?>
+            </td>
             <td><?= $title ?></td>
             <td><?= $comment ?></td>
             <?php
@@ -48,7 +56,14 @@
     $page = $_GET["page"];
 
     $con = mysqli_connect("localhost", "threader_user", "0000", "threader");
-    $sql = "SELECT * FROM comment WHERE title LIKE '%$keyword%' OR comment LIKE '%$keyword%' ORDER BY comment_id DESC";
+    $sql = "SELECT *, 
+            CASE author_id
+            WHEN NULL THEN NULL
+            ELSE (SELECT member_name FROM member WHERE member_id = author_id)
+            END AS member_name
+            FROM `comment` 
+            WHERE title LIKE '%$keyword%' OR comment LIKE '%$keyword%' 
+            ORDER BY comment_id DESC";
 
     $result = mysqli_query($con, $sql);
     $rows = mysqli_num_rows($result);

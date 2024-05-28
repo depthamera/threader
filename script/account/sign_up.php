@@ -5,10 +5,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Document</title>
-  <?php include "../header/header.php" ?>
 </head>
 
 <body>
+  <?php include "../header/header.php" ?>
   <script>
     //엘리먼트에 값이 입략되었는지 확인. (엘리먼트, 실패 시 출력할 엘리먼트의 이름)
     const checkInputProvided = (element, elementName) => {
@@ -34,6 +34,7 @@
 
     //아이디와 비밀번호가 입력되었다면 submit
     const trySubmit = () => {
+      const userName = document.getElementById("user_name");
       const userId = document.getElementById("user_id");
       const userPassword = document.getElementById("user_password");
       if (
@@ -48,6 +49,7 @@
   <h1>가입 정보 입력</h1>
 
   <form action="sign_up_submit.php" method="post" name="sign_up">
+    <input type="text" name="user_name" id="user_name" placeholder="닉네임"> <br>
     <input type="text" name="user_id" id="user_id" placeholder="아이디" />
     <button type="button" onclick="checkIdDuplication()">중복 확인</button>
     <br />

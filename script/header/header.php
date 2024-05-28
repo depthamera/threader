@@ -23,6 +23,7 @@ $is_admin = (isset($_SESSION["permission"]) && $_SESSION["permission"] == "admin
     <input type="text" name="keyword" id="keyword" onkeypress="handleKeyPress(event)" placeholder="검색">
     <?php
     if (isset($_SESSION["member_id"])) {
+        echo $_SESSION["member_id"] . " ";
         echo "<a href='../account/member_info.php'>회원정보</a> ";
         echo "<a href='../account/logout.php'>로그아웃</a>";
     } else {
