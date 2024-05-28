@@ -27,17 +27,17 @@
         $inner_id = $row["thread_inner_id"];
         $title = $row["title"];
         $comment = $row["comment"];
-        $author = ($row["author_type"] == "anonymous") ? "익명" : $row["author_id"];
+        $author =  $row["author_id"];
         $target = "thread.php?thread_id=$thread_id"; ?>
 
         <tr onclick="location.href='<?= $target ?>'">
             <td><?= $thread_id ?></td>
-            <td><?= $author ?></td>
+            <td><?= ($row["author_type"] == "anonymous") ? "익명" : $row["author_id"]; ?></td>
             <td><?= $title ?></td>
             <td><?= $comment ?></td>
             <?php
-            if ($is_admin && $inner_id != 1) { ?>
-                <td><a href="admin_comment_delete.php?thread_id=<?= $thread_id ?>&comment_id=<?= $comment_id ?>">삭제</a></td>
+            if (($is_admin || isset($_SESSION["member_id"]) && $author == $_SESSION["member_id"]) && $inner_id != 1) { ?>
+                <td><a href="comment_delete.php?thread_id=<?= $thread_id ?>&comment_id=<?= $comment_id ?>">삭제</a></td>
             <?php
             }
             ?>
@@ -87,6 +87,8 @@
             }
             $count++;
         }
+    } else {
+        echo "검색 결과가 존재하지 않습니다.";
     }
     ?>
 </body>

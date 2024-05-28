@@ -18,6 +18,7 @@
 </head>
 
 <body>
+    <h3><?= $_GET["thread_id"] ?>번 스레드</h3>
     <?php
     function draw_comment($row, $is_admin)
     {
@@ -26,17 +27,17 @@
         $inner_id = $row["thread_inner_id"];
         $title = $row["title"];
         $comment = $row["comment"];
-        $author = ($row["author_type"] == "anonymous") ? "익명" : $row["author_id"]; ?>
+        $author = $row["author_id"]; ?>
 
 
         <tr>
             <td><?= $inner_id ?></td>
-            <td><?= $author ?></td>
+            <td><?= ($row["author_type"] == "anonymous") ? "익명" : $row["author_id"]; ?></td>
             <td><?= $title ?></td>
             <td><?= $comment ?></td>
             <?php
-            if ($is_admin && $inner_id != 1) { ?>
-                <td><a href="admin_comment_delete.php?thread_id=<?= $thread_id ?>&comment_id=<?= $comment_id ?>">삭제</a></td>
+            if (($is_admin || isset($_SESSION["member_id"]) && $author == $_SESSION["member_id"]) && $inner_id != 1) { ?>
+                <td><a href="comment_delete.php?thread_id=<?= $thread_id ?>&comment_id=<?= $comment_id ?>">삭제</a></td>
             <?php
             }
             ?>

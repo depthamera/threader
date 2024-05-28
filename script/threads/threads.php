@@ -20,25 +20,24 @@
 <body>
     <h3>스레드 목록 (클릭 시 이동)</h3>
     <?php
-
-    //단일 스레드 출력 함수
+    //스레드 출력 함수
     function draw_thread($row, $is_admin)
     {
         $thread_id = $row["thread_id"];
         $title = $row["title"];
         $comment = $row["comment"];
-        $author = ($row["author_type"] == "anonymous") ? "익명" : $row["author_id"];
+        $author = $row["author_id"];
         $target = "thread.php?thread_id=$thread_id"; ?>
 
 
         <tr onclick="location.href='<?= $target ?>'">
             <td><?= $thread_id ?></td>
-            <td><?= $author ?></td>
+            <td><?= ($row["author_type"] == "anonymous") ? "익명" : $author; ?></td>
             <td><?= $title ?></td>
             <td><?= $comment ?></td>
             <?php
-            if ($is_admin) { ?>
-                <td><a href="admin_thread_delete.php?thread_id=<?= $thread_id ?>">삭제</a></td>
+            if ($is_admin || isset($_SESSION["member_id"]) && $author == $_SESSION["member_id"]) { ?>
+                <td><a href="thread_delete.php?thread_id=<?= $thread_id ?>">삭제</a></td>
             <?php
             }
             ?>
