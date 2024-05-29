@@ -26,20 +26,12 @@
         $inner_id = $row["thread_inner_id"];
         $title = $row["title"];
         $comment = $row["comment"];
-        $author = $row["author_id"]; ?>
+        $author = $row["author_display"]; ?>
 
 
         <tr>
             <td><?= $inner_id ?></td>
-            <td>
-                <?php
-                if ($row["author_type"] == "anonymous") {
-                    echo "익명";
-                } else {
-                    echo $row["member_name"] . "(" . $row["author_id"] . ")";
-                }
-                ?>
-            </td>
+            <td><?= $author ?></td>
             <td><?= $title ?></td>
             <td><?= $comment ?></td>
             <?php

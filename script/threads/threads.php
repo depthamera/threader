@@ -26,21 +26,13 @@
         $thread_id = $row["thread_id"];
         $title = $row["title"];
         $comment = $row["comment"];
-        $author = $row["author_id"];
+        $author = $row["author_display"];
         $target = "thread.php?thread_id=$thread_id"; ?>
 
 
         <tr onclick="location.href='<?= $target ?>'">
             <td><?= $thread_id ?></td>
-            <td>
-                <?php
-                if ($row["author_type"] == "anonymous") {
-                    echo "익명";
-                } else {
-                    echo $row["member_name"] . "(" . $row["author_id"] . ")";
-                }
-                ?>
-            </td>
+            <td><?= $author ?></td>
             <td><?= $title ?></td>
             <td><?= $comment ?></td>
             <?php
@@ -55,7 +47,7 @@
 
     //최근에 업데이트된 스레드부터 내림차순으로 정렬
     $con = mysqli_connect("localhost", "threader_user", "0000", "threader");
-    $sql = "SELECT cmt.thread_id, cmt.title, cmt.comment, cmt.author_id, cmt.author_type,
+    $sql = "SELECT cmt.thread_id, cmt.title, cmt.comment, cmt.author_display,
 			CASE cmt.author_id
             WHEN NULL THEN NULL
             ELSE (SELECT member_name FROM member WHERE member_id = cmt.author_id)
@@ -105,11 +97,10 @@
             }
             $count++;
         }
-    }
-
+    } else echo "스레드가 존재하지 않습니다";
     ?>
 
-
+    <hr>
     <h3>새로운 스레드 시작하기</h3>
     <form action="thread_submit.php" method="post" name="thread_post">
         <input type="text" name="title" id="title" placeholder="제목">

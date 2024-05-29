@@ -21,7 +21,8 @@ if ($row) {
 }
 //중복이 아닐 시 DB에 등록 후 로그인, 메인으로 이동
 else {
-    $sql = "INSERT INTO `member` (member_name, `member_id`, `member_password`) VALUES ('$user_name', '$user_id', '$user_password')";
+    if ($user_name == "") $sql = "INSERT INTO `member` (`member_id`, `member_password`) VALUES ('$user_id', '$user_password')";
+    else $sql = "INSERT INTO `member` (member_name, `member_id`, `member_password`) VALUES ('$user_name', '$user_id', '$user_password')";
     mysqli_query($con, $sql);
     session_start();
     $_SESSION["member_id"] = $user_id;
