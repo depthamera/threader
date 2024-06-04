@@ -27,6 +27,7 @@
         $title = $row["title"];
         $comment = $row["comment"];
         $author = $row["author_display"];
+        $author_id = $row["author_id"];
         $target = "thread.php?thread_id=$thread_id"; ?>
 
 
@@ -34,9 +35,8 @@
             <td><?= $thread_id ?></td>
             <td><?= $author ?></td>
             <td><?= $title ?></td>
-            <td><?= $comment ?></td>
             <?php
-            if ($is_admin || isset($_SESSION["member_id"]) && $author == $_SESSION["member_id"]) { ?>
+            if ($is_admin || isset($_SESSION["member_id"]) && $author_id == $_SESSION["member_id"]) { ?>
                 <td><a href="thread_delete.php?thread_id=<?= $thread_id ?>">삭제</a></td>
             <?php
             }
@@ -47,7 +47,7 @@
 
     //최근에 업데이트된 스레드부터 내림차순으로 정렬
     $con = mysqli_connect("localhost", "threader_user", "0000", "threader");
-    $sql = "SELECT cmt.thread_id, cmt.title, cmt.comment, cmt.author_display,
+    $sql = "SELECT cmt.thread_id, cmt.title, cmt.comment, cmt.author_display, cmt.author_id,
 			CASE cmt.author_id
             WHEN NULL THEN NULL
             ELSE (SELECT member_name FROM member WHERE member_id = cmt.author_id)
@@ -64,14 +64,14 @@
     $result = mysqli_query($con, $sql);
     $rows = mysqli_num_rows($result);
     //한 페이지에 표시될 최대 스레드
-    const ROW_MAX = 10;
+    const ROW_MAX = 5;
     //표시될 최대 페이지 수
-    const PAGE_MAX = 10;
+    const PAGE_MAX = 5;
 
     //페이지 출력, 관리자 계정이라면 삭제 메뉴도 표시
     if ($rows > 0) {
         echo "<table>";
-        echo "<tr><td>스레드 번호</td><td>작성자</td><td>제목</td><td>내용</td>" .
+        echo "<tr><td>스레드 번호</td><td>작성자</td><td>제목</td>" .
             ($is_admin ? "<td>관리</td>" : "")
             . "</tr>";
         $page = $_GET["page"];

@@ -26,6 +26,8 @@ else {
     mysqli_query($con, $sql);
     session_start();
     $_SESSION["member_id"] = $user_id;
+    $_SESSION["member_name"] = $user_name ? $user_name : null;
+    $_SESSION["permission"] = "member";
 
     echo "<script>location.replace('../main/main.php')</script>";
 }

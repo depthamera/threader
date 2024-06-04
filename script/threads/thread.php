@@ -26,8 +26,8 @@
         $inner_id = $row["thread_inner_id"];
         $title = $row["title"];
         $comment = $row["comment"];
-        $author = $row["author_display"]; ?>
-
+        $author = $row["author_display"];
+        $author_id = $row["author_id"] ?>
 
         <tr>
             <td><?= $inner_id ?></td>
@@ -35,7 +35,7 @@
             <td><?= $title ?></td>
             <td><?= $comment ?></td>
             <?php
-            if (($is_admin || isset($_SESSION["member_id"]) && $author == $_SESSION["member_id"]) && $inner_id != 1) { ?>
+            if (($is_admin || isset($_SESSION["member_id"]) && $author_id == $_SESSION["member_id"]) && $inner_id != 1) { ?>
                 <td><a href="comment_delete.php?thread_id=<?= $thread_id ?>&comment_id=<?= $comment_id ?>">삭제</a></td>
             <?php
             }

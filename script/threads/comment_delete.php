@@ -23,7 +23,7 @@
         $id_last = mysqli_fetch_array($res)[0];
 
         // 스레드의 마지막 코멘트 아이디를 갱신
-        $sql = "UPDATE thread SET thread_id_last = $id_last WHERE thread_id = $thread_id";
+        $sql = "UPDATE thread SET comment_id_last = $id_last WHERE thread_id = $thread_id";
         $res = mysqli_query($con, $sql);
     }
 
