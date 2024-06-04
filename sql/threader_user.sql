@@ -1,0 +1,3 @@
+GRANT USAGE ON *.* TO `threader_user`@`localhost` IDENTIFIED BY PASSWORD '*97E7471D816A37E38510728AEA47440F9C6E2585';
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON `threader`.* TO `threader_user`@`localhost`;
